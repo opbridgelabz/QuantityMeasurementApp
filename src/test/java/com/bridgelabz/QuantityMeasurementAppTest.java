@@ -53,4 +53,28 @@ public class QuantityMeasurementAppTest {
         assertThrows(IllegalArgumentException.class,
                 () -> new Length(Double.NaN, LengthUnit.FEET));
     }
+    
+    @Test
+    void testEquality_KilogramToGram() {
+        QuantityWeight kg = new QuantityWeight(1.0, WeightUnit.KILOGRAM);
+        QuantityWeight gram = new QuantityWeight(1000.0, WeightUnit.GRAM);
+        assertEquals(kg, gram);
+    }
+
+    @Test
+    void testConversion_KilogramToPound() {
+        QuantityWeight kg = new QuantityWeight(1.0, WeightUnit.KILOGRAM);
+        QuantityWeight pound = kg.convertTo(WeightUnit.POUND);
+        assertEquals(2.20462, pound.getValue(), 1e-5);
+    }
+
+    @Test
+    void testAddition_CrossUnit() {
+        QuantityWeight kg = new QuantityWeight(1.0, WeightUnit.KILOGRAM);
+        QuantityWeight gram = new QuantityWeight(1000.0, WeightUnit.GRAM);
+
+        QuantityWeight result = kg.add(gram);
+
+        assertEquals(new QuantityWeight(2.0, WeightUnit.KILOGRAM), result);
+    }
 }
