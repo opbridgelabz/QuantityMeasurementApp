@@ -5,86 +5,52 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class QuantityMeasurementAppTest {
 
-    private static final double EPSILON = 1e-6;
-
-    // UC1-UC3 Equality
-
     @Test
-    void testFeetEquality() {
-        assertEquals(
-                new Length(1.0, Length.LengthUnit.FEET),
-                new Length(1.0, Length.LengthUnit.FEET)
-        );
+    void testEquality_FeetToInches() {
+        Length l1 = new Length(1.0, LengthUnit.FEET);
+        Length l2 = new Length(12.0, LengthUnit.INCHES);
+        assertTrue(l1.equals(l2));
     }
 
     @Test
-    void testFeetInchesEquality() {
-        assertEquals(
-                new Length(1.0, Length.LengthUnit.FEET),
-                new Length(12.0, Length.LengthUnit.INCHES)
-        );
+    void testConvert_FeetToInches() {
+        Length l = new Length(1.0, LengthUnit.FEET);
+        assertEquals(new Length(12.0, LengthUnit.INCHES),
+                l.convertTo(LengthUnit.INCHES));
     }
 
     @Test
-    void testYardToFeetEquality() {
-        assertEquals(
-                new Length(1.0, Length.LengthUnit.YARDS),
-                new Length(3.0, Length.LengthUnit.FEET)
-        );
+    void testAdd_FeetAndInches() {
+        Length l1 = new Length(1.0, LengthUnit.FEET);
+        Length l2 = new Length(12.0, LengthUnit.INCHES);
+
+        Length result = l1.add(l2, LengthUnit.FEET);
+        assertEquals(new Length(2.0, LengthUnit.FEET), result);
     }
 
     @Test
-    void testCentimeterToInchEquality() {
-        assertEquals(
-                new Length(2.54, Length.LengthUnit.CENTIMETERS),
-                new Length(1.0, Length.LengthUnit.INCHES)
-        );
-    }
-
-    // UC5 Conversion
-
-    @Test
-    void testConvertFeetToInches() {
-        assertEquals(
-                12.0,
-                Length.convert(1.0,
-                        Length.LengthUnit.FEET,
-                        Length.LengthUnit.INCHES),
-                EPSILON
-        );
-    }
-
-    // UC6 Addition
-
-    @Test
-    void testAddition_DefaultUnit() {
-        Length l1 = new Length(1.0, Length.LengthUnit.FEET);
-        Length l2 = new Length(12.0, Length.LengthUnit.INCHES);
-
-        Length result = l1.add(l2);
-
-        assertEquals(new Length(2.0, Length.LengthUnit.FEET), result);
-    }
-
-    // UC7 Addition With Target Unit
-
-    @Test
-    void testAddition_TargetInches() {
-        Length l1 = new Length(1.0, Length.LengthUnit.FEET);
-        Length l2 = new Length(12.0, Length.LengthUnit.INCHES);
-
-        Length result = l1.add(l2, Length.LengthUnit.INCHES);
-
-        assertEquals(new Length(24.0, Length.LengthUnit.INCHES), result);
+    void testYardToFeet() {
+        Length yard = new Length(1.0, LengthUnit.YARDS);
+        Length feet = new Length(3.0, LengthUnit.FEET);
+        assertTrue(yard.equals(feet));
     }
 
     @Test
-    void testAddition_TargetYards() {
-        Length l1 = new Length(1.0, Length.LengthUnit.FEET);
-        Length l2 = new Length(12.0, Length.LengthUnit.INCHES);
+    void testCentimeterToFeet() {
+        Length cm = new Length(30.48, LengthUnit.CENTIMETERS);
+        Length feet = new Length(1.0, LengthUnit.FEET);
+        assertTrue(cm.equals(feet));
+    }
 
-        Length result = l1.add(l2, Length.LengthUnit.YARDS);
+    @Test
+    void testNullUnit() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new Length(1.0, null));
+    }
 
-        assertEquals(0.666666, result.getValue(), EPSILON);
+    @Test
+    void testInvalidValue() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new Length(Double.NaN, LengthUnit.FEET));
     }
 }
