@@ -3,7 +3,7 @@ package com.bridgelabz;
 import java.util.Objects;
 
 /**
- * UC3 - Generic Length class implementing DRY principle.
+ * UC4 - Extended Unit Support (Feet, Inches, Yards, Centimeters)
  */
 public class Length {
 
@@ -11,21 +11,23 @@ public class Length {
     private final LengthUnit unit;
 
     /**
-     * Enum representing supported length units.
-     * Conversion factor defined relative to FEET.
+     * All units convert to INCHES (base unit)
      */
     public enum LengthUnit {
-        FEET(1.0),
-        INCHES(1.0 / 12.0);   // 1 inch = 1/12 feet
 
-        private final double toFeetFactor;
+        INCHES(1.0),
+        FEET(12.0),
+        YARDS(36.0),
+        CENTIMETERS(0.393701);
 
-        LengthUnit(double toFeetFactor) {
-            this.toFeetFactor = toFeetFactor;
+        private final double toInchesFactor;
+
+        LengthUnit(double toInchesFactor) {
+            this.toInchesFactor = toInchesFactor;
         }
 
-        public double toFeet(double value) {
-            return value * toFeetFactor;
+        public double toBase(double value) {
+            return value * toInchesFactor;
         }
     }
 
@@ -37,20 +39,13 @@ public class Length {
         this.unit = unit;
     }
 
-    /**
-     * Convert this length to base unit (FEET).
-     */
     private double convertToBaseUnit() {
-        return unit.toFeet(value);
+        return unit.toBase(value);
     }
 
-    /**
-     * Compare two Length objects.
-     */
     public boolean compare(Length other) {
-        if (other == null) {
-            return false;
-        }
+        if (other == null) return false;
+
         return Double.compare(
                 this.convertToBaseUnit(),
                 other.convertToBaseUnit()
