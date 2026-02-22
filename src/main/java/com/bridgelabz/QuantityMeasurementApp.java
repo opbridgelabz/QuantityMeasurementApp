@@ -2,78 +2,30 @@ package com.bridgelabz;
 
 public class QuantityMeasurementApp {
 
-    // UC1–UC4: Equality Demonstration
-    public static boolean demonstrateLengthEquality(Length l1, Length l2) {
-        return l1.equals(l2);
-    }
-
-    // UC5: Conversion Demonstration
-    public static Length demonstrateLengthConversion(
-            double value,
-            Length.LengthUnit from,
-            Length.LengthUnit to) {
-
-        double convertedValue = Length.convert(value, from, to);
-        return new Length(convertedValue, to);
-    }
-
-    // UC6: Addition (Result in First Operand Unit)
-    public static Length demonstrateLengthAddition(Length l1, Length l2) {
-        return l1.add(l2);
-    }
-
-    // UC7: Addition (Explicit Target Unit)
-    public static Length demonstrateLengthAddition(
-            Length l1,
-            Length l2,
-            Length.LengthUnit targetUnit) {
-
-        return l1.add(l2, targetUnit);
-    }
-
-    // ✅ Main method for manual execution (console testing)
     public static void main(String[] args) {
 
-        System.out.println("=== Quantity Measurement Application (UC1 → UC7) ===");
+        Length l1 = new Length(1.0, LengthUnit.FEET);
+        Length l2 = new Length(12.0, LengthUnit.INCHES);
 
-        Length oneFoot = new Length(1.0, Length.LengthUnit.FEET);
-        Length twelveInches = new Length(12.0, Length.LengthUnit.INCHES);
+        System.out.println("Equality Test:");
+        System.out.println(l1 + " equals " + l2 + " ? " + l1.equals(l2));
 
-        // Equality
-        System.out.println("\nEquality Check:");
-        System.out.println("1 Foot == 12 Inches ? " +
-                demonstrateLengthEquality(oneFoot, twelveInches));
+        System.out.println("\nConversion Test:");
+        System.out.println("1 Foot to Inches: " + l1.convertTo(LengthUnit.INCHES));
 
-        // Conversion
-        System.out.println("\nConversion:");
-        Length converted = demonstrateLengthConversion(
-                1.0,
-                Length.LengthUnit.FEET,
-                Length.LengthUnit.INCHES);
-        System.out.println("1 Foot in Inches = " + converted);
+        System.out.println("\nAddition Test:");
+        System.out.println("1 Foot + 12 Inches (Feet): " +
+                l1.add(l2, LengthUnit.FEET));
 
-        // UC6 Addition (default unit)
-        System.out.println("\nAddition (Default Unit - UC6):");
-        Length sumDefault = demonstrateLengthAddition(oneFoot, twelveInches);
-        System.out.println("1 Foot + 12 Inches = " + sumDefault);
+        System.out.println("\nYard Test:");
+        Length yard = new Length(1.0, LengthUnit.YARDS);
+        System.out.println("1 Yard equals 3 Feet? " +
+                yard.equals(new Length(3.0, LengthUnit.FEET)));
 
-        // UC7 Addition (explicit target unit)
-        System.out.println("\nAddition (Explicit Target Unit - UC7):");
+        System.out.println("\nCentimeter Test:");
+        Length cm = new Length(30.48, LengthUnit.CENTIMETERS);
+        System.out.println("30.48 cm equals 1 Foot? " +
+                cm.equals(new Length(1.0, LengthUnit.FEET)));
 
-        Length sumInInches = demonstrateLengthAddition(
-                oneFoot,
-                twelveInches,
-                Length.LengthUnit.INCHES);
-
-        System.out.println("1 Foot + 12 Inches in INCHES = " + sumInInches);
-
-        Length sumInYards = demonstrateLengthAddition(
-                oneFoot,
-                twelveInches,
-                Length.LengthUnit.YARDS);
-
-        System.out.println("1 Foot + 12 Inches in YARDS = " + sumInYards);
-
-        System.out.println("\n=== Execution Completed ===");
     }
 }
