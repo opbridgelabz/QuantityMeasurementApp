@@ -14,7 +14,7 @@ public final class Length {
         YARDS(36.0),
         CENTIMETERS(0.393701);
 
-        private final double factor;
+        private final double factor; 
 
         LengthUnit(double factor) {
             this.factor = factor;
@@ -26,6 +26,7 @@ public final class Length {
     }
 
     public Length(double value, LengthUnit unit) {
+
         if (!Double.isFinite(value))
             throw new IllegalArgumentException("Invalid value");
 
@@ -49,7 +50,7 @@ public final class Length {
         return value * unit.getFactor();
     }
 
-    // ✅ REQUIRED FOR UC5 TESTS
+    // UC5: static conversion utility
     public static double convert(double value,
                                  LengthUnit source,
                                  LengthUnit target) {
@@ -60,25 +61,35 @@ public final class Length {
         if (source == null || target == null)
             throw new IllegalArgumentException("Unit cannot be null");
 
-        double baseValue = value * source.getFactor();
-        return baseValue / target.getFactor();
+        double base = value * source.getFactor();
+        return base / target.getFactor();
     }
 
-    // Convert object to another unit
-    public Length convertTo(LengthUnit targetUnit) {
-        double convertedValue = convert(this.value, this.unit, targetUnit);
-        return new Length(convertedValue, targetUnit);
-    }
-
-    // UC6 Addition
+    // UC6: addition result in first operand unit
     public Length add(Length other) {
+
         if (other == null)
             throw new IllegalArgumentException("Second operand cannot be null");
 
-        double sumInBase = this.toBaseUnit() + other.toBaseUnit();
-        double resultValue = sumInBase / this.unit.getFactor();
+        double sumBase = this.toBaseUnit() + other.toBaseUnit();
+        double result = sumBase / this.unit.getFactor();
 
-        return new Length(resultValue, this.unit);
+        return new Length(result, this.unit);
+    }
+
+    // UC7: addition with explicit target unit
+    public Length add(Length other, LengthUnit targetUnit) {
+
+        if (other == null)
+            throw new IllegalArgumentException("Second operand cannot be null");
+
+        if (targetUnit == null)
+            throw new IllegalArgumentException("Target unit cannot be null");
+
+        double sumBase = this.toBaseUnit() + other.toBaseUnit();
+        double result = sumBase / targetUnit.getFactor();
+
+        return new Length(result, targetUnit);
     }
 
     private boolean compare(Length other) {
