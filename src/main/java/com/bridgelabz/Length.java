@@ -2,42 +2,32 @@ package com.bridgelabz;
 
 import java.util.Objects;
 
-/**
- * Generic value object representing a length measurement.
- * Base unit for normalization: INCHES.
- */
 public final class Length {
 
     private final double value;
     private final LengthUnit unit;
-
-    // Small epsilon for floating point comparison
     private static final double EPSILON = 1e-6;
 
-    /**
-     * Supported length units.
-     * Conversion factors are defined relative to INCHES.
-     */
     public enum LengthUnit {
         INCHES(1.0),
         FEET(12.0),
         YARDS(36.0),
         CENTIMETERS(0.393701);
 
-        private final double factorToInches;
+        private final double factor;
 
-        LengthUnit(double factorToInches) {
-            this.factorToInches = factorToInches;
+        LengthUnit(double factor) {
+            this.factor = factor;
         }
 
         public double getFactor() {
-            return factorToInches;
+            return factor;
         }
     }
 
     public Length(double value, LengthUnit unit) {
         if (!Double.isFinite(value))
-            throw new IllegalArgumentException("Value must be finite");
+            throw new IllegalArgumentException("Invalid value");
 
         if (unit == null)
             throw new IllegalArgumentException("Unit cannot be null");
@@ -54,40 +44,41 @@ public final class Length {
         return unit;
     }
 
-    // Convert to base unit (inches)
+    // Convert this object to base unit (inches)
     private double toBaseUnit() {
         return value * unit.getFactor();
     }
 
-    /**
-     * Instance method conversion (immutability preserved)
-     */
-    public Length convertTo(LengthUnit targetUnit) {
-
-        if (targetUnit == null)
-            throw new IllegalArgumentException("Target unit cannot be null");
-
-        double baseValue = toBaseUnit();
-        double converted = baseValue / targetUnit.getFactor();
-
-        return new Length(converted, targetUnit);
-    }
-
-    /**
-     * Static conversion API (raw value)
-     */
+    // ✅ REQUIRED FOR UC5 TESTS
     public static double convert(double value,
                                  LengthUnit source,
                                  LengthUnit target) {
 
         if (!Double.isFinite(value))
-            throw new IllegalArgumentException("Value must be finite");
+            throw new IllegalArgumentException("Invalid value");
 
         if (source == null || target == null)
-            throw new IllegalArgumentException("Units cannot be null");
+            throw new IllegalArgumentException("Unit cannot be null");
 
-        double base = value * source.getFactor();
-        return base / target.getFactor();
+        double baseValue = value * source.getFactor();
+        return baseValue / target.getFactor();
+    }
+
+    // Convert object to another unit
+    public Length convertTo(LengthUnit targetUnit) {
+        double convertedValue = convert(this.value, this.unit, targetUnit);
+        return new Length(convertedValue, targetUnit);
+    }
+
+    // UC6 Addition
+    public Length add(Length other) {
+        if (other == null)
+            throw new IllegalArgumentException("Second operand cannot be null");
+
+        double sumInBase = this.toBaseUnit() + other.toBaseUnit();
+        double resultValue = sumInBase / this.unit.getFactor();
+
+        return new Length(resultValue, this.unit);
     }
 
     private boolean compare(Length other) {
@@ -108,6 +99,6 @@ public final class Length {
 
     @Override
     public String toString() {
-        return String.format("%.4f %s", value, unit);
+        return value + " " + unit;
     }
 }
