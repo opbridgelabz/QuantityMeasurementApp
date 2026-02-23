@@ -41,5 +41,28 @@ public class QuantityMeasurementApp {
 
         System.out.println("1 kg in grams: " +
                 demonstrateConversion(weight1, WeightUnit.GRAM));
+        
+     // Volume Demonstration
+
+        Quantity<VolumeUnit> volume1 =
+                new Quantity<>(1.0, VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> volume2 =
+                new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
+
+        Quantity<VolumeUnit> volume3 =
+                new Quantity<>(1.0, VolumeUnit.GALLON);
+
+        System.out.println("Volume equality (L vs mL): "
+                + demonstrateEquality(volume1, volume2));
+
+        System.out.println("1 L in Gallon: "
+                + demonstrateConversion(volume1, VolumeUnit.GALLON));
+
+        System.out.println("Add 1L + 1000mL: "
+                + demonstrateAddition(volume1, volume2));
+
+        System.out.println("Add 1Gallon + 1L in Gallon: "
+                + demonstrateAddition(volume3, volume1, VolumeUnit.GALLON));
     }
 }
