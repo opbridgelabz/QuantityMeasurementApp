@@ -2,72 +2,68 @@ package com.bridgelabz;
 
 public class QuantityMeasurementApp {
 
-    public static <U extends IMeasurable> boolean
-    demonstrateEquality(Quantity<U> q1, Quantity<U> q2) {
-        return q1.equals(q2);
-    }
-
-    public static <U extends IMeasurable> Quantity<U>
-    demonstrateConversion(Quantity<U> q, U targetUnit) {
-        return q.convertTo(targetUnit);
-    }
-
-    public static <U extends IMeasurable> Quantity<U>
-    demonstrateAddition(Quantity<U> q1, Quantity<U> q2) {
-        return q1.add(q2);
-    }
-
-    public static <U extends IMeasurable> Quantity<U>
-    demonstrateAddition(Quantity<U> q1, Quantity<U> q2, U targetUnit) {
-        return q1.add(q2, targetUnit);
-    }
-
-    // ========== UC12 METHODS ==========
-
-    public static <U extends IMeasurable> Quantity<U>
-    demonstrateSubtraction(Quantity<U> q1, Quantity<U> q2) {
-        return q1.subtract(q2);
-    }
-
-    public static <U extends IMeasurable> Quantity<U>
-    demonstrateSubtraction(Quantity<U> q1, Quantity<U> q2, U targetUnit) {
-        return q1.subtract(q2, targetUnit);
-    }
-
-    public static <U extends IMeasurable> double
-    demonstrateDivision(Quantity<U> q1, Quantity<U> q2) {
-        return q1.divide(q2);
-    }
-
-    // ========== MAIN ==========
-
     public static void main(String[] args) {
 
-        Quantity<LengthUnit> feet =
+        demonstrateTemperatureEquality();
+        demonstrateTemperatureConversion();
+        demonstrateUnsupportedTemperatureAddition();
+        demonstrateSubtraction();
+    }
+
+    private static void demonstrateTemperatureEquality() {
+        System.out.println("---- Temperature Equality ----");
+
+        Quantity<TemperatureUnit> c =
+                new Quantity<>(0.0, TemperatureUnit.CELSIUS);
+
+        Quantity<TemperatureUnit> f =
+                new Quantity<>(32.0, TemperatureUnit.FAHRENHEIT);
+
+        System.out.println("0°C equals 32°F ? " + c.equals(f));
+        System.out.println();
+    }
+
+    private static void demonstrateTemperatureConversion() {
+        System.out.println("---- Temperature Conversion ----");
+
+        Quantity<TemperatureUnit> c =
+                new Quantity<>(100.0, TemperatureUnit.CELSIUS);
+
+        Quantity<TemperatureUnit> f =
+                c.convertTo(TemperatureUnit.FAHRENHEIT);
+
+        System.out.println("100°C in Fahrenheit = " + f.getValue());
+        System.out.println();
+    }
+
+    private static void demonstrateUnsupportedTemperatureAddition() {
+        System.out.println("---- Unsupported Temperature Addition ----");
+
+        Quantity<TemperatureUnit> c =
+                new Quantity<>(100.0, TemperatureUnit.CELSIUS);
+
+        try {
+            c.add(new Quantity<>(50.0, TemperatureUnit.CELSIUS));
+        } catch (UnsupportedOperationException e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
+
+        System.out.println();
+    }
+
+    private static void demonstrateSubtraction() {
+        System.out.println("---- Length Subtraction ----");
+
+        // Assumes LengthUnit exists and supports arithmetic
+        Quantity<LengthUnit> feet1 =
                 new Quantity<>(10.0, LengthUnit.FEET);
 
-        Quantity<LengthUnit> inches =
-                new Quantity<>(6.0, LengthUnit.INCHES);
+        Quantity<LengthUnit> feet2 =
+                new Quantity<>(4.0, LengthUnit.FEET);
 
-        System.out.println("Subtraction: "
-                + demonstrateSubtraction(feet, inches));
+        Quantity<LengthUnit> result = feet1.subtract(feet2);
 
-        System.out.println("Subtraction (target inches): "
-                + demonstrateSubtraction(feet, inches, LengthUnit.INCHES));
-
-        System.out.println("Division: "
-                + demonstrateDivision(feet, new Quantity<>(2.0, LengthUnit.FEET)));
-
-        Quantity<VolumeUnit> litre =
-                new Quantity<>(5.0, VolumeUnit.LITRE);
-
-        Quantity<VolumeUnit> ml =
-                new Quantity<>(500.0, VolumeUnit.MILLILITRE);
-
-        System.out.println("Volume Subtraction: "
-                + demonstrateSubtraction(litre, ml));
-
-        System.out.println("Volume Division: "
-                + demonstrateDivision(litre, new Quantity<>(2.0, VolumeUnit.LITRE)));
+        System.out.println("10 FEET - 4 FEET = " +
+                result.getValue() + " " + result.getUnit());
     }
 }
