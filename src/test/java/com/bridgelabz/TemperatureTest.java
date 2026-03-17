@@ -1,9 +1,9 @@
 package com.bridgelabz;
-
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TemperatureTest {
+class TemperatureTest 
+{
 
     @Test
     void testEquality_CelsiusToFahrenheit() {
