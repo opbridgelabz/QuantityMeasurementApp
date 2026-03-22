@@ -9,8 +9,11 @@ public class QuantityMeasurementCacheRepository implements IQuantityMeasurementR
     private static QuantityMeasurementCacheRepository instance;
     private List<QuantityMeasurementEntity> list = new ArrayList<>();
 
-    private QuantityMeasurementCacheRepository() {}
+    private QuantityMeasurementCacheRepository() {
+    	
+    }
 
+    
     public static QuantityMeasurementCacheRepository getInstance() {
         if (instance == null) {
             instance = new QuantityMeasurementCacheRepository();
@@ -18,6 +21,7 @@ public class QuantityMeasurementCacheRepository implements IQuantityMeasurementR
         return instance;
     }
 
+    
     @Override
     public void save(QuantityMeasurementEntity entity) {
         list.add(entity);
@@ -27,4 +31,14 @@ public class QuantityMeasurementCacheRepository implements IQuantityMeasurementR
     public List<QuantityMeasurementEntity> findAll() {
         return list;
     }
+
+	@Override
+	public void deleteAll() {
+		list.clear();
+	}
+
+	@Override
+	public int getTotalCount() {
+		return list.size();
+	}
 }
