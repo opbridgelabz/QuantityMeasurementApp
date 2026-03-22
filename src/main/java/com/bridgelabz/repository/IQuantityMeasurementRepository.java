@@ -4,6 +4,11 @@ import com.bridgelabz.model.QuantityMeasurementEntity;
 import java.util.List;
 
 public interface IQuantityMeasurementRepository {
-    void save(QuantityMeasurementEntity entity);
+   
+	void save(QuantityMeasurementEntity entity);
     List<QuantityMeasurementEntity> findAll();
+    void deleteAll();
+    int getTotalCount();
+    
+    
 }

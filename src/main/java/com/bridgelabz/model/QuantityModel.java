@@ -14,4 +14,13 @@ public class QuantityModel {
     public double getValue() { return value; }
     public String getUnit() { return unit; }
     public String getType() { return type; }
+    
+    @Override
+    public String toString()
+    {
+    	return value+" "+unit+" "+type;
+    }
+    
+    
+    
 }
