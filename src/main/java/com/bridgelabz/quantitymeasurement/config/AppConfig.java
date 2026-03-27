@@ -1,0 +1,19 @@
+package com.bridgelabz.quantitymeasurement.config;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class AppConfig
+//a
+{
+
+    @Bean
+    public ModelMapper getModelMapperBean()
+    {
+        return new ModelMapper();
+    }
+
+
+}
